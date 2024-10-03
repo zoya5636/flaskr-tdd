@@ -35,7 +35,6 @@ db = SQLAlchemy(app)
 from project import models
 
 def login_required(f):
-    print(f)
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('logged_in'):
