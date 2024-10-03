@@ -1,7 +1,7 @@
-import os
 import pytest
 from pathlib import Path
 import json
+from flask import jsonify
 
 from project.app import app, db, login_required
 
@@ -77,10 +77,12 @@ def test_messages(client):
     assert b"&lt;Hello&gt;" in rv.data
     assert b"<strong>HTML</strong> allowed here" in rv.data
 
+
 def test_search(client):
     """Search for messages"""
     rv = client.get("/search/?query=hello", content_type="html/text")
     assert rv.status_code == 200
+
 
 def test_delete_message(client):
     """Ensure the messages are being deleted"""
@@ -92,10 +94,13 @@ def test_delete_message(client):
     data = json.loads(rv.data)
     assert data["status"] == 1
 
+
 def test_login_required():
     with app.test_request_context():
+
         @login_required
         def sample_function():
-            return jsonify({'testKey1': 0}), 401
+            return jsonify({"testKey1": 0}), 401
+
         response = sample_function()
         assert response[1] == 401
